@@ -86,7 +86,7 @@ class AnalyticsConfig:
 
     @property
     def catalog_path(self) -> Path:
-        return self.analytics_root / "catalog" / "home_analytics.duckdb"
+        return self.analytics_root / "catalog" / "home_analytics.sqlite3"
 
     @property
     def raw_root(self) -> Path:
@@ -103,4 +103,3 @@ class AnalyticsConfig:
     @property
     def raw_queue_root(self) -> Path:
         return self.analytics_root / "raw_queue"
-

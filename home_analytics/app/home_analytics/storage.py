@@ -7,8 +7,6 @@ from pathlib import Path
 import shutil
 from typing import Any
 
-import duckdb
-
 from .config import AnalyticsConfig
 
 
@@ -17,10 +15,6 @@ def parse_timestamp(value: str | None) -> datetime:
         return datetime.now(timezone.utc)
     normalized = value.replace("Z", "+00:00")
     return datetime.fromisoformat(normalized)
-
-
-def sql_quote(value: str) -> str:
-    return value.replace("'", "''")
 
 
 @dataclass(slots=True)
@@ -120,15 +114,9 @@ class AnalyticsStorage:
             dataset, date_part, hour_part = parts[0], parts[1], parts[2]
             target_dir = self.raw_root / dataset / date_part / hour_part
             target_dir.mkdir(parents=True, exist_ok=True)
-            target = target_dir / f"{source.stem}.parquet"
-            sql = (
-                "COPY ("
-                f"SELECT * FROM read_json_auto('{sql_quote(str(source))}', format='newline_delimited', union_by_name=true)"
-                f") TO '{sql_quote(str(target))}' (FORMAT PARQUET, COMPRESSION ZSTD)"
-            )
-            with duckdb.connect() as con:
-                con.execute(sql)
+            target = target_dir / "events.jsonl"
+            with source.open("r", encoding="utf-8") as src_handle, target.open("a", encoding="utf-8") as dst_handle:
+                shutil.copyfileobj(src_handle, dst_handle)
             source.unlink()
             compacted.append(target)
         return compacted
-

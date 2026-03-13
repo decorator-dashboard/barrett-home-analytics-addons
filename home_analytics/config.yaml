@@ -1,8 +1,8 @@
 name: "Home Analytics"
 description: "SSD-backed historical analytics and trend engine for Home Assistant."
-version: "0.1.0"
+version: "0.1.1"
 slug: "home_analytics"
-url: "https://github.com/home-assistant"
+url: "https://github.com/decorator-dashboard/barrett-home-analytics-addons"
 arch:
   - amd64
   - aarch64
@@ -69,4 +69,3 @@ schema:
   ssd_min_free_gb: "int"
   include_domains:
     - "str"
-
