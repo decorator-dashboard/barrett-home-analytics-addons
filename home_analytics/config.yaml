@@ -1,0 +1,72 @@
+name: "Home Analytics"
+description: "SSD-backed historical analytics and trend engine for Home Assistant."
+version: "0.1.0"
+slug: "home_analytics"
+url: "https://github.com/home-assistant"
+arch:
+  - amd64
+  - aarch64
+  - armv7
+startup: application
+boot: auto
+init: false
+hassio_api: true
+homeassistant_api: true
+map:
+  - type: addon_config
+    read_only: false
+  - type: homeassistant_config
+    read_only: true
+  - type: media
+    read_only: false
+options:
+  analytics_root: "/media/home_analytics"
+  require_external_storage: true
+  snapshot_interval_seconds: 60
+  compaction_interval_minutes: 15
+  feature_build_interval_minutes: 30
+  screenlogic_import_enabled: true
+  screenlogic_history_days: 365
+  screenlogic_system_name: "Pentair: 22-8E-AD"
+  screenlogic_password: ""
+  notify_service: "notify.mobile_app_iphone"
+  ssd_min_free_gb: 10
+  include_domains:
+    - "light"
+    - "switch"
+    - "climate"
+    - "sensor"
+    - "binary_sensor"
+    - "media_player"
+    - "remote"
+    - "vacuum"
+    - "fan"
+    - "cover"
+    - "lock"
+    - "scene"
+    - "script"
+    - "person"
+    - "device_tracker"
+    - "weather"
+    - "mbapi2020"
+    - "screenlogic"
+    - "input_boolean"
+    - "input_datetime"
+    - "input_number"
+    - "input_select"
+    - "input_text"
+schema:
+  analytics_root: "str"
+  require_external_storage: "bool"
+  snapshot_interval_seconds: "int"
+  compaction_interval_minutes: "int"
+  feature_build_interval_minutes: "int"
+  screenlogic_import_enabled: "bool"
+  screenlogic_history_days: "int"
+  screenlogic_system_name: "str"
+  screenlogic_password: "password"
+  notify_service: "str"
+  ssd_min_free_gb: "int"
+  include_domains:
+    - "str"
+

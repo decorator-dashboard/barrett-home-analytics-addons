@@ -1,0 +1,8 @@
+{
+  "name": "home-analytics-addon",
+  "private": true,
+  "dependencies": {
+    "node-screenlogic": "^2.1.1"
+  }
+}
+
