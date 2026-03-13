@@ -5,6 +5,7 @@ import json
 import os
 import subprocess
 from pathlib import Path
+import shutil
 from typing import Any
 
 from .config import AnalyticsConfig
@@ -57,6 +58,10 @@ def import_screenlogic(config: AnalyticsConfig) -> tuple[list[dict[str, Any]], l
     if not config.screenlogic_import_enabled:
         return None
 
+    node_bin = shutil.which("node")
+    if not node_bin:
+        return None
+
     output_dir = config.checkpoints_root / "screenlogic"
     output_dir.mkdir(parents=True, exist_ok=True)
     script_path = Path("/app/screenlogic_import.js")
@@ -69,24 +74,28 @@ def import_screenlogic(config: AnalyticsConfig) -> tuple[list[dict[str, Any]], l
         "SCREENLOGIC_PASSWORD": config.screenlogic_password,
         "SCREENLOGIC_HISTORY_DAYS": str(config.screenlogic_history_days),
     }
-    subprocess.run(
-        [
-            "node",
-            str(script_path),
-            "--system-name",
-            config.screenlogic_system_name,
-            "--password",
-            config.screenlogic_password,
-            "--days",
-            str(config.screenlogic_history_days),
-            "--out-dir",
-            str(output_dir),
-        ],
-        env=env,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
+    try:
+        subprocess.run(
+            [
+                node_bin,
+                str(script_path),
+                "--system-name",
+                config.screenlogic_system_name,
+                "--password",
+                config.screenlogic_password,
+                "--days",
+                str(config.screenlogic_history_days),
+                "--out-dir",
+                str(output_dir),
+            ],
+            env=env,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
     raw_path = output_dir / "screenlogic_history_raw.json"
     if not raw_path.exists():
         return None

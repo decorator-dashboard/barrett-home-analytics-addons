@@ -1,5 +1,0 @@
-build_from:
-  amd64: docker.io/library/node:22-bookworm
-  aarch64: docker.io/arm64v8/node:22-bookworm
-  armv7: docker.io/arm32v7/node:22-bookworm
-
